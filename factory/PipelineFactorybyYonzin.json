@@ -1,0 +1,9 @@
+{
+	"name": "PipelineFactorybyYonzin",
+	"location": "brazilsouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "1dfa3435-0d08-4dd7-aacb-9c46cb387a7c",
+		"tenantId": "717b9a79-1b91-41ab-a6f7-a579b46a9b41"
+	}
+}
