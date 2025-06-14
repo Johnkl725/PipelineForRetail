@@ -4,19 +4,7 @@
 		"description": "Este trigger se activará cuando el managaer suba un archivo",
 		"annotations": [],
 		"runtimeState": "Started",
-		"pipelines": [
-			{
-				"pipelineReference": {
-					"referenceName": "pipeline1",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"p_container": "datalake",
-					"p_directory": "landing",
-					"p_file_name": "Online Retail Data Set"
-				}
-			}
-		],
+		"pipelines": [],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
 			"blobPathBeginsWith": "/landing/blobs/csvfiles/retail_sales_dataset.csv",
