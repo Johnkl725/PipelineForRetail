@@ -1,0 +1,9 @@
+{
+	"name": "factoryforpracticespipelines",
+	"location": "brazilsouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "b4aba3f1-a509-4ac5-b602-e6e65a46a9b1",
+		"tenantId": "717b9a79-1b91-41ab-a6f7-a579b46a9b41"
+	}
+}
