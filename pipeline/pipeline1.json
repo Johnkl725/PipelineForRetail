@@ -541,6 +541,10 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
+								"expression": {
+									"value": "@equals(item().name, variables('archivo_mas_reciente'))",
+									"type": "Expression"
+								},
 								"ifFalseActivities": [
 									{
 										"name": "Delete2",
@@ -649,7 +653,7 @@
 														"type": "Expression"
 													},
 													"file_name": {
-														"value": "@variables('archivo_mas_reciente')",
+														"value": "@item().name",
 														"type": "Expression"
 													}
 												}
@@ -669,7 +673,7 @@
 														"type": "Expression"
 													},
 													"file_name": {
-														"value": "@variables('archivo_mas_reciente')",
+														"value": "@item().name",
 														"type": "Expression"
 													}
 												}
@@ -733,7 +737,7 @@
 														"type": "Expression"
 													},
 													"file_name": {
-														"value": "@variables('archivo_mas_reciente')",
+														"value": "@item().name",
 														"type": "Expression"
 													}
 												}
