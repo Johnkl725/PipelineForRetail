@@ -11,19 +11,11 @@
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"connectionString\"de \"AzureBlobStorage1\""
 		},
-		"ManagerTrigger_properties_pipeline1_parameters_p_container": {
-			"type": "string",
-			"defaultValue": "datalake"
-		},
-		"ManagerTrigger_properties_pipeline1_parameters_p_directory": {
-			"type": "string",
-			"defaultValue": "landing"
-		},
-		"ManagerTrigger_properties_pipeline1_parameters_p_file_name": {
-			"type": "string",
-			"defaultValue": "Online Retail Data Set"
-		},
 		"ManagerTrigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/418d1c1c-7a97-4cde-ad92-8364c4ad03fa/resourceGroups/PracticandoconYonzin/providers/Microsoft.Storage/storageAccounts/blobstoragesyonzin"
+		},
+		"mantrigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/418d1c1c-7a97-4cde-ad92-8364c4ad03fa/resourceGroups/PracticandoconYonzin/providers/Microsoft.Storage/storageAccounts/blobstoragesyonzin"
 		}
@@ -780,6 +772,67 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ManagerTrigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Este trigger se activará cuando el managaer suba un archivo",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pipeline1",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/datalake/blobs/csvfiles/retail_sales_dataset.csv",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('ManagerTrigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pipeline1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/mantrigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pipeline1",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/datalake/blobs/csvfiles/retail_sales_dataset.csv",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('mantrigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pipeline1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
@@ -810,41 +863,6 @@
 			"apiVersion": "2018-06-01",
 			"properties": {},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ManagerTrigger')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "Este trigger se activará cuando el managaer suba un archivo",
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pipeline1",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"p_container": "[parameters('ManagerTrigger_properties_pipeline1_parameters_p_container')]",
-							"p_directory": "[parameters('ManagerTrigger_properties_pipeline1_parameters_p_directory')]",
-							"p_file_name": "[parameters('ManagerTrigger_properties_pipeline1_parameters_p_file_name')]"
-						}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/landing/blobs/csvfiles/retail_sales_dataset.csv",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('ManagerTrigger_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobCreated"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pipeline1')]"
-			]
 		}
 	]
 }
