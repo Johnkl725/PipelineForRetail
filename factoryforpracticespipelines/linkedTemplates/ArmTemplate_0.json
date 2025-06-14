@@ -656,6 +656,68 @@
 											"value": "@greater(\n  convertTimeZone(activity('Get Metadata2').output.lastModified, 'UTC', 'SA Pacific Standard Time'),\n  convertTimeZone(variables('fecha_mayor'), 'UTC', 'SA Pacific Standard Time')\n)",
 											"type": "Expression"
 										},
+										"ifTrueActivities": [
+											{
+												"name": "Set variable2",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "fecha_mayor",
+													"value": {
+														"value": "@activity('Get Metadata2').output.lastModified",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "Set variable3",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "Set variable2",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "archivo_mas_reciente",
+													"value": {
+														"value": "@item().name",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								},
+								{
+									"name": "If Condition3",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "If Condition2",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@equals(item().name, variables('archivo_mas_reciente'))",
+											"type": "Expression"
+										},
 										"ifFalseActivities": [
 											{
 												"name": "Delete2",
@@ -706,16 +768,9 @@
 										],
 										"ifTrueActivities": [
 											{
-												"name": "Copy data1_copy1_copy1",
+												"name": "Copy data1_copy1_copy1_copy1_copy1",
 												"type": "Copy",
-												"dependsOn": [
-													{
-														"activity": "Set variable3",
-														"dependencyConditions": [
-															"Succeeded"
-														]
-													}
-												],
+												"dependsOn": [],
 												"policy": {
 													"timeout": "0.12:00:00",
 													"retry": 0,
@@ -771,7 +826,7 @@
 																"type": "Expression"
 															},
 															"file_name": {
-																"value": "@variables('archivo_mas_reciente')",
+																"value": "@item().name",
 																"type": "Expression"
 															}
 														}
@@ -799,11 +854,11 @@
 												]
 											},
 											{
-												"name": "Set variable1_copy1",
+												"name": "Set variable1_copy1_copy1_copy1",
 												"type": "SetVariable",
 												"dependsOn": [
 													{
-														"activity": "Copy data1_copy1_copy1",
+														"activity": "Copy data1_copy1_copy1_copy1_copy1",
 														"dependencyConditions": [
 															"Succeeded"
 														]
@@ -817,17 +872,17 @@
 												"typeProperties": {
 													"variableName": "name_silver",
 													"value": {
-														"value": "@item().name",
+														"value": "@variables('archivo_mas_reciente')",
 														"type": "Expression"
 													}
 												}
 											},
 											{
-												"name": "Delete1",
+												"name": "Delete1_copy1_copy1",
 												"type": "Delete",
 												"dependsOn": [
 													{
-														"activity": "Set variable1_copy1",
+														"activity": "Set variable1_copy1_copy1_copy1",
 														"dependencyConditions": [
 															"Succeeded"
 														]
@@ -875,47 +930,6 @@
 														"type": "AzureBlobStorageReadSettings",
 														"recursive": true,
 														"enablePartitionDiscovery": false
-													}
-												}
-											},
-											{
-												"name": "Set variable2",
-												"type": "SetVariable",
-												"dependsOn": [],
-												"policy": {
-													"secureOutput": false,
-													"secureInput": false
-												},
-												"userProperties": [],
-												"typeProperties": {
-													"variableName": "fecha_mayor",
-													"value": {
-														"value": "@activity('Get Metadata2').output.lastModified",
-														"type": "Expression"
-													}
-												}
-											},
-											{
-												"name": "Set variable3",
-												"type": "SetVariable",
-												"dependsOn": [
-													{
-														"activity": "Set variable2",
-														"dependencyConditions": [
-															"Succeeded"
-														]
-													}
-												],
-												"policy": {
-													"secureOutput": false,
-													"secureInput": false
-												},
-												"userProperties": [],
-												"typeProperties": {
-													"variableName": "archivo_mas_reciente",
-													"value": {
-														"value": "@item().name",
-														"type": "Expression"
 													}
 												}
 											}
