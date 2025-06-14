@@ -773,7 +773,7 @@
 			},
 			"fecha_mayor": {
 				"type": "String",
-				"defaultValue": "\"0001-01-01T00:00:00Z\""
+				"defaultValue": "0001-01-01T00:00:00Z"
 			},
 			"archivo_mas_reciente": {
 				"type": "String"
