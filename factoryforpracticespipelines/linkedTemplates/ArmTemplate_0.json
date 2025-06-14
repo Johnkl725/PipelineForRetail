@@ -653,7 +653,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"expression": {
-											"value": "@greater(\n  convertTimeZone(activity('Get Metadata2').output.lastModified, 'UTC', 'SA Pacific Standard Time'),\n  convertTimeZone(variables('fecha_mayor'), 'UTC', 'SA Pacific Standard Time')\n)",
+											"value": "@greater(\n  ticks(convertTimeZone(activity('Get Metadata2').output.lastModified, 'UTC', 'SA Pacific Standard Time')),\n  ticks(convertTimeZone(variables('fecha_mayor'), 'UTC', 'SA Pacific Standard Time'))\n)",
 											"type": "Expression"
 										},
 										"ifTrueActivities": [
