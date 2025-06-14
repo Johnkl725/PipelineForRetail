@@ -822,7 +822,7 @@
 				],
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
-					"blobPathBeginsWith": "/datalake/blobs/csvfiles/retail_sales_dataset.csv",
+					"blobPathBeginsWith": "/datalake/blobs/landing/retail_sales_dataset.csv",
 					"ignoreEmptyBlobs": true,
 					"scope": "[parameters('ManagerTrigger_properties_typeProperties_scope')]",
 					"events": [
@@ -852,7 +852,7 @@
 				],
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
-					"blobPathBeginsWith": "/datalake/blobs/csvfiles/retail_sales_dataset.csv",
+					"blobPathBeginsWith": "/datalake/blobs/landing/retail_sales_dataset.csv",
 					"ignoreEmptyBlobs": true,
 					"scope": "[parameters('mantrigger_properties_typeProperties_scope')]",
 					"events": [
