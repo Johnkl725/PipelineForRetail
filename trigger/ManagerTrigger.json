@@ -4,7 +4,14 @@
 		"description": "Este trigger se activará cuando el managaer suba un archivo",
 		"annotations": [],
 		"runtimeState": "Started",
-		"pipelines": [],
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pipeline1",
+					"type": "PipelineReference"
+				}
+			}
+		],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
 			"blobPathBeginsWith": "/datalake/blobs/csvfiles/retail_sales_dataset.csv",
