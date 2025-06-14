@@ -14,7 +14,7 @@
 		],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
-			"blobPathBeginsWith": "/datalake/blobs/csvfiles/retail_sales_dataset.csv",
+			"blobPathBeginsWith": "/datalake/blobs/landing/retail_sales_dataset.csv",
 			"ignoreEmptyBlobs": true,
 			"scope": "/subscriptions/418d1c1c-7a97-4cde-ad92-8364c4ad03fa/resourceGroups/PracticandoconYonzin/providers/Microsoft.Storage/storageAccounts/blobstoragesyonzin",
 			"events": [
