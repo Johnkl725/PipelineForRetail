@@ -402,7 +402,7 @@
 						"type": "Expression"
 					},
 					"condition": {
-						"value": "@and(\n  contains(toLower(replace(item().name, ' ', '')), 'retail'),\n  endswith(toLower(replace(item().name, ' ', '')), 'csv')\n)",
+						"value": "@and(\n  contains(toLower(replace(trim(item().name), ' ', '')), 'retail'),\n  endswith(toLower(trim(item().name)), 'csv')\n)",
 						"type": "Expression"
 					}
 				}
