@@ -480,7 +480,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@equals(\n  formatDateTime(activity('Get Metadata2').output.lastModified, 'yyyy-MM-dd'),\n  utcNow('yyyy-MM-dd')\n)",
+									"value": "@equals(\n  formatDateTime(convertTimeZone(activity('Get Metadata2').output.lastModified, 'UTC', 'SA Pacific Standard Time'), 'yyyy-MM-dd'),\n  formatDateTime(convertTimeZone(utcNow(), 'UTC', 'SA Pacific Standard Time'), 'yyyy-MM-dd')\n)",
 									"type": "Expression"
 								},
 								"ifTrueActivities": [
