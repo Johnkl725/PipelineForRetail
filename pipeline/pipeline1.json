@@ -26,7 +26,8 @@
 							"directory": {
 								"value": "@pipeline().parameters.p_directory",
 								"type": "Expression"
-							}
+							},
+							"file_name": "Online Retail Data Set.csv"
 						}
 					},
 					"fieldList": [
@@ -34,6 +35,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
