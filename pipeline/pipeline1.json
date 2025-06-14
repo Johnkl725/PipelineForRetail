@@ -632,6 +632,16 @@
 													}
 												}
 											},
+											"logStorageSettings": {
+												"linkedServiceName": {
+													"referenceName": "AzureBlobStorage1",
+													"type": "LinkedServiceReference"
+												},
+												"path": {
+													"value": "@pipeline().parameters.p_directory",
+													"type": "Expression"
+												}
+											},
 											"enableLogging": true,
 											"storeSettings": {
 												"type": "AzureBlobStorageReadSettings",
