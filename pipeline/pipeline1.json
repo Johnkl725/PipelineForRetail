@@ -458,6 +458,7 @@
 								],
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
 									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
@@ -542,7 +543,7 @@
 														"type": "Expression"
 													},
 													"file_name": {
-														"value": "@activity('Filter2').output.value",
+														"value": "@item().name",
 														"type": "Expression"
 													}
 												}
@@ -562,7 +563,7 @@
 														"type": "Expression"
 													},
 													"file_name": {
-														"value": "@activity('Filter2').output.value",
+														"value": "@item().name",
 														"type": "Expression"
 													}
 												}
