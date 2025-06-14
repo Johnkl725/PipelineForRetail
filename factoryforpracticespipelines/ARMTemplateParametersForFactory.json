@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "factoryforpracticespipelines"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"ManagerTrigger_properties_pipeline1_parameters_p_container": {
+			"value": "datalake"
+		},
+		"ManagerTrigger_properties_pipeline1_parameters_p_directory": {
+			"value": "landing"
+		},
+		"ManagerTrigger_properties_pipeline1_parameters_p_file_name": {
+			"value": "Online Retail Data Set"
+		},
+		"ManagerTrigger_properties_typeProperties_scope": {
+			"value": "/subscriptions/418d1c1c-7a97-4cde-ad92-8364c4ad03fa/resourceGroups/PracticandoconYonzin/providers/Microsoft.Storage/storageAccounts/blobstoragesyonzin"
+		}
+	}
+}
