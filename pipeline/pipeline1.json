@@ -171,7 +171,7 @@
 													},
 													"directory": "bronze",
 													"file_name": {
-														"value": "@item().name",
+														"value": "@activity('Filter1').output.value",
 														"type": "Expression"
 													}
 												}
@@ -246,7 +246,7 @@
 														"type": "Expression"
 													},
 													"file_name": {
-														"value": "@item().name",
+														"value": "@activity('Filter2').output.value",
 														"type": "Expression"
 													}
 												}
@@ -266,7 +266,7 @@
 														"type": "Expression"
 													},
 													"file_name": {
-														"value": "@item().name",
+														"value": "@activity('Filter2').output.value",
 														"type": "Expression"
 													}
 												}
@@ -276,7 +276,14 @@
 									{
 										"name": "Set variable1",
 										"type": "SetVariable",
-										"dependsOn": [],
+										"dependsOn": [
+											{
+												"activity": "Copy data1_copy1",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
 										"policy": {
 											"secureOutput": false,
 											"secureInput": false
@@ -295,7 +302,7 @@
 										"type": "Filter",
 										"dependsOn": [
 											{
-												"activity": "Set variable1",
+												"activity": "Get Metadata2",
 												"dependencyConditions": [
 													"Succeeded"
 												]
@@ -304,12 +311,55 @@
 										"userProperties": [],
 										"typeProperties": {
 											"items": {
-												"value": "@activity('Get Metadata1').output.lastModified",
+												"value": "@activity('Get Metadata2').output.lastModified",
 												"type": "Expression"
 											},
 											"condition": {
-												"value": "@equals(\n    formatDateTime(item().lastModified, 'yyyy-MM-dd'),\n    utcNow('yyyy-MM-dd')\n)",
+												"value": "@equals(\n  formatDateTime(activity('Get Metadata2').output.lastModified, 'yyyy-MM-dd'),\n  utcNow('yyyy-MM-dd')\n)",
 												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "Get Metadata2",
+										"type": "GetMetadata",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"dataset": {
+												"referenceName": "DelimitedText1",
+												"type": "DatasetReference",
+												"parameters": {
+													"container": {
+														"value": "@pipeline().parameters.p_container",
+														"type": "Expression"
+													},
+													"directory": {
+														"value": "@pipeline().parameters.p_directory",
+														"type": "Expression"
+													},
+													"file_name": {
+														"value": "@item().name",
+														"type": "Expression"
+													}
+												}
+											},
+											"fieldList": [
+												"lastModified"
+											],
+											"storeSettings": {
+												"type": "AzureBlobStorageReadSettings",
+												"enablePartitionDiscovery": false
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
 											}
 										}
 									}
