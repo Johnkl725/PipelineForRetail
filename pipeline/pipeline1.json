@@ -47,7 +47,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Get Metadata1",
+						"activity": "Filter1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -56,7 +56,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Get Metadata1').output.childItems",
+						"value": "@activity('Filter1').output.value",
 						"type": "Expression"
 					},
 					"activities": [
@@ -272,6 +272,29 @@
 						}
 					}
 				]
+			},
+			{
+				"name": "Filter1",
+				"type": "Filter",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get Metadata1').output.childItems",
+						"type": "Expression"
+					},
+					"condition": {
+						"value": "@equals(formatDateTime(item().lastModified, 'yyyy-MM-dd'), utcNow('yyyy-MM-dd'))",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
