@@ -3,9 +3,196 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
-				"type": "Copy",
+				"name": "Get Metadata1",
+				"type": "GetMetadata",
 				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference",
+						"parameters": {
+							"container": {
+								"value": "@pipeline().parameters.p_container",
+								"type": "Expression"
+							},
+							"directory": {
+								"value": "@pipeline().parameters.p_directory",
+								"type": "Expression"
+							}
+						}
+					},
+					"fieldList": [],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"activities": [
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@and(endswith(item().name, '.csv'), contains(item().name , 'Retail'))",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Copy data1_copy1",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "Set variable1",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "DelimitedTextSource",
+												"storeSettings": {
+													"type": "AzureBlobStorageReadSettings",
+													"recursive": true,
+													"enablePartitionDiscovery": false
+												},
+												"formatSettings": {
+													"type": "DelimitedTextReadSettings"
+												}
+											},
+											"sink": {
+												"type": "DelimitedTextSink",
+												"storeSettings": {
+													"type": "AzureBlobStorageWriteSettings"
+												},
+												"formatSettings": {
+													"type": "DelimitedTextWriteSettings",
+													"quoteAllText": true,
+													"fileExtension": ".txt"
+												}
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "DelimitedText1",
+												"type": "DatasetReference",
+												"parameters": {
+													"container": {
+														"value": "@pipeline().parameters.p_container",
+														"type": "Expression"
+													},
+													"directory": {
+														"value": "@pipeline().parameters.p_directory",
+														"type": "Expression"
+													},
+													"file_name": {
+														"value": "@item().name",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "DelimitedText1",
+												"type": "DatasetReference",
+												"parameters": {
+													"container": {
+														"value": "@pipeline().parameters.p_container",
+														"type": "Expression"
+													},
+													"directory": {
+														"value": "bronze",
+														"type": "Expression"
+													},
+													"file_name": {
+														"value": "@item().name",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"name": "Set variable1",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "name_silver",
+											"value": {
+												"value": "@item().name",
+												"type": "Expression"
+											}
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Copy data Silver",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -57,11 +244,11 @@
 								"type": "Expression"
 							},
 							"directory": {
-								"value": "@pipeline().parameters.p_directory",
+								"value": "bronze",
 								"type": "Expression"
 							},
 							"file_name": {
-								"value": "@pipeline().parameters.p_file_name",
+								"value": "@name_silver",
 								"type": "Expression"
 							}
 						}
@@ -72,15 +259,9 @@
 						"referenceName": "DelimitedText1",
 						"type": "DatasetReference",
 						"parameters": {
-							"container": {
-								"value": "@pipeline().parameters.p_container",
-								"type": "Expression"
-							},
+							"container": "datalake",
 							"directory": "bronze",
-							"file_name": {
-								"value": "@pipeline().parameters.p_file_name",
-								"type": "Expression"
-							}
+							"file_name": "Online Retail Data Set.csv"
 						}
 					}
 				]
@@ -98,6 +279,11 @@
 			"p_file_name": {
 				"type": "string",
 				"defaultValue": "Online Retail Data Set.csv"
+			}
+		},
+		"variables": {
+			"name_silver": {
+				"type": "String"
 			}
 		},
 		"annotations": []
