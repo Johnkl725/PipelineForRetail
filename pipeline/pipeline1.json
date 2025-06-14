@@ -48,7 +48,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Get Metadata1",
+						"activity": "Filter2",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -57,7 +57,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Get Metadata1').output.childItems",
+						"value": "@activity('Filter2').output.value",
 						"type": "Expression"
 					},
 					"activities": [
@@ -183,14 +183,7 @@
 									{
 										"name": "Copy data1_copy1",
 										"type": "Copy",
-										"dependsOn": [
-											{
-												"activity": "Filter2",
-												"dependencyConditions": [
-													"Succeeded"
-												]
-											}
-										],
+										"dependsOn": [],
 										"policy": {
 											"timeout": "0.12:00:00",
 											"retry": 0,
@@ -246,7 +239,7 @@
 														"type": "Expression"
 													},
 													"file_name": {
-														"value": "@activity('Filter2').output.value",
+														"value": "@item().name",
 														"type": "Expression"
 													}
 												}
@@ -266,7 +259,7 @@
 														"type": "Expression"
 													},
 													"file_name": {
-														"value": "@activity('Filter2').output.value",
+														"value": "@item().name",
 														"type": "Expression"
 													}
 												}
@@ -294,72 +287,6 @@
 											"value": {
 												"value": "@item().name",
 												"type": "Expression"
-											}
-										}
-									},
-									{
-										"name": "Filter2",
-										"type": "Filter",
-										"dependsOn": [
-											{
-												"activity": "Get Metadata2",
-												"dependencyConditions": [
-													"Succeeded"
-												]
-											}
-										],
-										"userProperties": [],
-										"typeProperties": {
-											"items": {
-												"value": "@activity('Get Metadata2').output.lastModified",
-												"type": "Expression"
-											},
-											"condition": {
-												"value": "@equals(\n  formatDateTime(activity('Get Metadata2').output.lastModified, 'yyyy-MM-dd'),\n  utcNow('yyyy-MM-dd')\n)",
-												"type": "Expression"
-											}
-										}
-									},
-									{
-										"name": "Get Metadata2",
-										"type": "GetMetadata",
-										"dependsOn": [],
-										"policy": {
-											"timeout": "0.12:00:00",
-											"retry": 0,
-											"retryIntervalInSeconds": 30,
-											"secureOutput": false,
-											"secureInput": false
-										},
-										"userProperties": [],
-										"typeProperties": {
-											"dataset": {
-												"referenceName": "DelimitedText1",
-												"type": "DatasetReference",
-												"parameters": {
-													"container": {
-														"value": "@pipeline().parameters.p_container",
-														"type": "Expression"
-													},
-													"directory": {
-														"value": "@pipeline().parameters.p_directory",
-														"type": "Expression"
-													},
-													"file_name": {
-														"value": "@item().name",
-														"type": "Expression"
-													}
-												}
-											},
-											"fieldList": [
-												"lastModified"
-											],
-											"storeSettings": {
-												"type": "AzureBlobStorageReadSettings",
-												"enablePartitionDiscovery": false
-											},
-											"formatSettings": {
-												"type": "DelimitedTextReadSettings"
 											}
 										}
 									}
@@ -454,6 +381,29 @@
 						}
 					}
 				]
+			},
+			{
+				"name": "Filter2",
+				"type": "Filter",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get Metadata1').output.childItems",
+						"type": "Expression"
+					},
+					"condition": {
+						"value": "@equals(formatDateTime(item().lastModified, 'yyyy-MM-dd'), utcNow('yyyy-MM-dd'))",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
