@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "DelimitedText1",
+						"referenceName": "DelimitedText2",
 						"type": "DatasetReference",
 						"parameters": {
 							"container": {
@@ -26,8 +26,7 @@
 							"directory": {
 								"value": "@pipeline().parameters.p_directory",
 								"type": "Expression"
-							},
-							"file_name": "Online Retail Data Set.csv"
+							}
 						}
 					},
 					"fieldList": [
