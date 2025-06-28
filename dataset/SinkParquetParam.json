@@ -1,0 +1,28 @@
+{
+	"name": "SinkParquetParam",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureDatalakeStorage",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"s_fileName": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@concat(split(dataset().s_fileName,'.')[0],'_',utcNow('yyyyMMdd'),'.parquet')",
+					"type": "Expression"
+				},
+				"fileSystem": "staging"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
