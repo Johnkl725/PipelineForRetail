@@ -104,11 +104,22 @@
 				"outputs": [
 					{
 						"referenceName": "SinkCosmosDB",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"containerName": {
+								"value": "@pipeline().parameters.containerName",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
 		],
+		"parameters": {
+			"containerName": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }

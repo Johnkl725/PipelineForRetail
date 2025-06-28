@@ -3,7 +3,18 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LS_COSMOSDB",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"containerName": {
+					"value": "@dataset().containerName",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"containerName": {
+				"type": "String"
+			}
 		},
 		"annotations": [],
 		"type": "CosmosDbSqlApiCollection",
