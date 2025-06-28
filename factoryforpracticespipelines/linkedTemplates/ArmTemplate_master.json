@@ -11,6 +11,18 @@
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"connectionString\"de \"AzureBlobStorage1\""
 		},
+		"LS_AzureDatalakeStorage_accountKey": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"accountKey\"de \"LS_AzureDatalakeStorage\""
+		},
+		"LS_COSMOSDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"LS_COSMOSDB\""
+		},
+		"LS_AzureDatalakeStorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://blobstoragesyonzin.dfs.core.windows.net/"
+		},
 		"ManagerTrigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/418d1c1c-7a97-4cde-ad92-8364c4ad03fa/resourceGroups/PracticandoconYonzin/providers/Microsoft.Storage/storageAccounts/blobstoragesyonzin"
@@ -48,6 +60,15 @@
 					},
 					"AzureBlobStorage1_connectionString": {
 						"value": "[parameters('AzureBlobStorage1_connectionString')]"
+					},
+					"LS_AzureDatalakeStorage_accountKey": {
+						"value": "[parameters('LS_AzureDatalakeStorage_accountKey')]"
+					},
+					"LS_COSMOSDB_connectionString": {
+						"value": "[parameters('LS_COSMOSDB_connectionString')]"
+					},
+					"LS_AzureDatalakeStorage_properties_typeProperties_url": {
+						"value": "[parameters('LS_AzureDatalakeStorage_properties_typeProperties_url')]"
 					},
 					"ManagerTrigger_properties_typeProperties_scope": {
 						"value": "[parameters('ManagerTrigger_properties_typeProperties_scope')]"
