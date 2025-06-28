@@ -1,0 +1,35 @@
+{
+	"name": "GM_Source",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureDatalakeStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "datalake"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "category_id",
+				"type": "String"
+			},
+			{
+				"name": "category_department_id",
+				"type": "String"
+			},
+			{
+				"name": "category_name",
+				"type": "String"
+			}
+		]
+	}
+}
