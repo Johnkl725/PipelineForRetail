@@ -72,13 +72,33 @@
 					},
 					"ManagerTrigger_properties_typeProperties_scope": {
 						"value": "[parameters('ManagerTrigger_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "factoryforpracticespipelines_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
 					},
 					"mantrigger_properties_typeProperties_scope": {
 						"value": "[parameters('mantrigger_properties_typeProperties_scope')]"
 					}
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'factoryforpracticespipelines_ArmTemplate_0')]"
+			]
 		}
 	]
 }
