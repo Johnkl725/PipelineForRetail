@@ -11,11 +11,23 @@
 		"AzureBlobStorage2_connectionString": {
 			"value": ""
 		},
+		"AzureSqlDatabase1_password": {
+			"value": ""
+		},
 		"LS_AzureDatalakeStorage_accountKey": {
 			"value": ""
 		},
 		"LS_COSMOSDB_connectionString": {
 			"value": ""
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"value": "azzyonzin1.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"value": "azuresqldata"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"value": "azz12"
 		},
 		"HttpTransacciones_properties_typeProperties_url": {
 			"value": "https://raw.githubusercontent.com/addc-peru/AzureDataFactory/refs/heads/data/Transacciones.csv"
