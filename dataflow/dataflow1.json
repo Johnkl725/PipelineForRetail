@@ -1,0 +1,66 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_azdbs_transacciones",
+						"type": "DatasetReference"
+					},
+					"name": "TransaccionesCSV"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "cast1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "aggregate1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id_usuario as string,",
+				"          tipo_transaccion as string,",
+				"          moneda as string,",
+				"          monto as string,",
+				"          fecha_transaccion as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> TransaccionesCSV",
+				"TransaccionesCSV cast(output(",
+				"          monto as float",
+				"     ),",
+				"     errors: true) ~> cast1",
+				"cast1 derive(Fecha = toDate(fecha_transaccion,'yyyy-MM-dd HH:mm:ss'),",
+				"          monto_PEN = iif(moneda==\"PEN\",monto,monto*3.6)) ~> derivedColumn1",
+				"derivedColumn1 aggregate(groupBy(id_usuario)) ~> aggregate1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

@@ -13,11 +13,32 @@
 				"fileName": "Transacciones.csv",
 				"container": "datasets"
 			},
-			"columnDelimiter": ",",
+			"columnDelimiter": "|",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "id_usuario",
+				"type": "String"
+			},
+			{
+				"name": "tipo_transaccion",
+				"type": "String"
+			},
+			{
+				"name": "moneda",
+				"type": "String"
+			},
+			{
+				"name": "monto",
+				"type": "String"
+			},
+			{
+				"name": "fecha_transaccion",
+				"type": "String"
+			}
+		]
 	}
 }
