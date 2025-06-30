@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"connectionString\"de \"LS_COSMOSDB\""
 		},
+		"HttpTransacciones_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://raw.githubusercontent.com/addc-peru/AzureDataFactory/refs/heads/data/Transacciones.csv"
+		},
 		"LS_AzureDatalakeStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://blobstoragesyonzin.dfs.core.windows.net/"
@@ -30,10 +34,6 @@
 		"mantrigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/418d1c1c-7a97-4cde-ad92-8364c4ad03fa/resourceGroups/PracticandoconYonzin/providers/Microsoft.Storage/storageAccounts/blobstoragesyonzin"
-		},
-		"HttpTransacciones_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://raw.githubusercontent.com/addc-peru/AzureDataFactory/refs/heads/data/Transacciones.csv"
 		},
 		"containerUri": {
 			"type": "string",
@@ -71,11 +71,11 @@
 					"LS_COSMOSDB_connectionString": {
 						"value": "[parameters('LS_COSMOSDB_connectionString')]"
 					},
-					"LS_AzureDatalakeStorage_properties_typeProperties_url": {
-						"value": "[parameters('LS_AzureDatalakeStorage_properties_typeProperties_url')]"
-					},
 					"HttpTransacciones_properties_typeProperties_url": {
 						"value": "[parameters('HttpTransacciones_properties_typeProperties_url')]"
+					},
+					"LS_AzureDatalakeStorage_properties_typeProperties_url": {
+						"value": "[parameters('LS_AzureDatalakeStorage_properties_typeProperties_url')]"
 					}
 				}
 			},
