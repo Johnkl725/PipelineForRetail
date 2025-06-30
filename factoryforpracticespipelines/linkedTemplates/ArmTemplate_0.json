@@ -23,9 +23,9 @@
 			"type": "string",
 			"defaultValue": "https://blobstoragesyonzin.dfs.core.windows.net/"
 		},
-		"ManagerTrigger_properties_typeProperties_scope": {
+		"HttpTransacciones_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "/subscriptions/418d1c1c-7a97-4cde-ad92-8364c4ad03fa/resourceGroups/PracticandoconYonzin/providers/Microsoft.Storage/storageAccounts/blobstoragesyonzin"
+			"defaultValue": "https://raw.githubusercontent.com/addc-peru/AzureDataFactory/refs/heads/data/Transacciones.csv"
 		}
 	},
 	"variables": {
@@ -120,6 +120,27 @@
 				"type": "CosmosDb",
 				"typeProperties": {
 					"connectionString": "[parameters('LS_COSMOSDB_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/HttpTransacciones')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HttpServer",
+				"typeProperties": {
+					"url": "[parameters('HttpTransacciones_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
 				},
 				"connectVia": {
 					"referenceName": "AutoResolveIntegrationRuntime",
@@ -1817,37 +1838,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/GM_Source')]",
 				"[concat(variables('factoryId'), '/pipelines/CopyDataParam')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ManagerTrigger')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "Este trigger se activará cuando el managaer suba un archivo",
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pipeline1",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/datalake/blobs/landing/retail_sales_dataset.csv",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('ManagerTrigger_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobCreated"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pipeline1')]"
 			]
 		}
 	]
