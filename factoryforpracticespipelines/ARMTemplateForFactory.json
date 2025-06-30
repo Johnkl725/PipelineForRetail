@@ -357,7 +357,14 @@
 					{
 						"name": "Data flow1",
 						"type": "ExecuteDataFlow",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
@@ -367,6 +374,15 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflow1",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"TransaccionesCSV": {},
+									"sink1": {}
+								}
+							},
 							"staging": {},
 							"compute": {
 								"coreCount": 8,
@@ -384,7 +400,7 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DelimitedText3')]",
 				"[concat(variables('factoryId'), '/datasets/ds_azdbs_transacciones')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
 			]
 		},
 		{
@@ -1633,7 +1649,21 @@
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
-				"schema": [],
+				"schema": [
+					{
+						"name": "cliente_id",
+						"type": "varchar"
+					},
+					{
+						"name": "fecha",
+						"type": "date"
+					},
+					{
+						"name": "monto_PEN",
+						"type": "float",
+						"precision": 15
+					}
+				],
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "Transacciones"
@@ -2339,12 +2369,19 @@
 						"          monto as float",
 						"     ),",
 						"     errors: true) ~> cast1",
-						"cast1 derive(Fecha = toDate(fecha_transaccion,'yyyy-MM-dd HH:mm:ss'),",
+						"cast1 derive(cliente_id = id_usuario,",
+						"          fecha = toDate(fecha_transaccion,'yyyy-MM-dd HH:mm:ss'),",
 						"          monto_PEN = iif(moneda==\"PEN\",monto,monto*3.6)) ~> derivedColumn1",
-						"derivedColumn1 aggregate(groupBy(tipo_transaccion),",
-						"     Monto_total = sum(monto_PEN)) ~> aggregate1",
+						"derivedColumn1 aggregate(groupBy(cliente_id,",
+						"          fecha),",
+						"     monto_PEN = sum(monto_PEN)) ~> aggregate1",
 						"aggregate1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
+						"     input(",
+						"          cliente_id as string,",
+						"          fecha as date,",
+						"          monto_PEN as double",
+						"     ),",
 						"     deletable:false,",
 						"     insertable:true,",
 						"     updateable:false,",
