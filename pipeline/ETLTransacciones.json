@@ -55,7 +55,10 @@
 				"outputs": [
 					{
 						"referenceName": "ds_azdbs_transacciones",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"namedelarchivo": "Transacciones.csv"
+						}
 					}
 				]
 			},

@@ -5,12 +5,20 @@
 			"referenceName": "AzureBlobStorage2",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"namedelarchivo": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "Transacciones.csv",
+				"fileName": {
+					"value": "@dataset().namedelarchivo",
+					"type": "Expression"
+				},
 				"container": "datasets"
 			},
 			"columnDelimiter": "|",
