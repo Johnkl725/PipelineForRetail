@@ -1,0 +1,14 @@
+{
+	"name": "PipelineEXC",
+	"properties": {
+		"variables": {
+			"vFilasProcesadas": {
+				"type": "String"
+			},
+			"vFilasInsertadas": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
