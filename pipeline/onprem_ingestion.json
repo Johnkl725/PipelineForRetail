@@ -96,6 +96,15 @@
 						"file_name": "dim_passengers.csv"
 					}
 				]
+			},
+			"p_mapping_passanger": {
+				"type": "object"
+			},
+			"p_mapping_flight": {
+				"type": "object"
+			},
+			"p_mapping_airline": {
+				"type": "object"
 			}
 		},
 		"variables": {
