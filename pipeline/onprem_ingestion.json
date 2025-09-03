@@ -59,11 +59,6 @@
 				]
 			}
 		],
-		"parameters": {
-			"contenedor": {
-				"type": "string"
-			}
-		},
 		"variables": {
 			"vAreas": {
 				"type": "String"
