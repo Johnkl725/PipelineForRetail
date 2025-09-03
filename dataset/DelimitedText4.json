@@ -2,15 +2,15 @@
 	"name": "DelimitedText4",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "FileServer1",
+			"referenceName": "LS_AzureDatalakeStorage",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "FileServerLocation",
-				"fileName": "dim_airports.csv"
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "datalake"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
