@@ -1,10 +1,10 @@
 {
-	"name": "PipelineEXC",
+	"name": "onprem_ingestion",
 	"properties": {
 		"activities": [
 			{
-				"name": "Get Metadata1",
-				"type": "GetMetadata",
+				"name": "Copy data1",
+				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -15,207 +15,48 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataset": {
-						"referenceName": "Excel1",
-						"type": "DatasetReference"
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "FileServerReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
 					},
-					"fieldList": [
-						"childItems"
-					],
-					"storeSettings": {
-						"type": "AzureBlobFSReadSettings",
-						"enablePartitionDiscovery": false
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
 					}
-				}
-			},
-			{
-				"name": "ForEach1",
-				"type": "ForEach",
-				"dependsOn": [
+				},
+				"inputs": [
 					{
-						"activity": "Get Metadata1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
+						"referenceName": "DelimitedText4",
+						"type": "DatasetReference"
 					}
 				],
-				"userProperties": [],
-				"typeProperties": {
-					"items": {
-						"value": "@activity('Get Metadata1').output.items",
-						"type": "Expression"
-					},
-					"activities": [
-						{
-							"name": "If Condition1",
-							"type": "IfCondition",
-							"dependsOn": [],
-							"userProperties": [],
-							"typeProperties": {
-								"expression": {
-									"value": "@contains(item(),'votos')",
-									"type": "Expression"
-								},
-								"ifTrueActivities": [
-									{
-										"name": "DataflowVotos_copy1",
-										"type": "ExecuteDataFlow",
-										"dependsOn": [
-											{
-												"activity": "Set variable1_copy1",
-												"dependencyConditions": [
-													"Succeeded"
-												]
-											}
-										],
-										"policy": {
-											"timeout": "0.12:00:00",
-											"retry": 0,
-											"retryIntervalInSeconds": 30,
-											"secureOutput": false,
-											"secureInput": false
-										},
-										"userProperties": [],
-										"typeProperties": {
-											"dataflow": {
-												"referenceName": "dataflow2",
-												"type": "DataFlowReference",
-												"datasetParameters": {
-													"source1": {
-														"p_container": {
-															"value": "@pipeline().parameters.contenedor",
-															"type": "Expression"
-														},
-														"p_folder": {
-															"value": "EXC/temps",
-															"type": "Expression"
-														},
-														"p_file": {
-															"value": "@variables('nombre_historico')",
-															"type": "Expression"
-														}
-													},
-													"source2": {
-														"p_container": {
-															"value": "@pipeline().parameters.contenedor",
-															"type": "Expression"
-														},
-														"p_folder": "EXC",
-														"p_file": "areas"
-													}
-												}
-											},
-											"compute": {
-												"coreCount": 8,
-												"computeType": "General"
-											},
-											"traceLevel": "Fine"
-										}
-									},
-									{
-										"name": "Copy data1_copy1",
-										"type": "Copy",
-										"dependsOn": [],
-										"policy": {
-											"timeout": "0.12:00:00",
-											"retry": 0,
-											"retryIntervalInSeconds": 30,
-											"secureOutput": false,
-											"secureInput": false
-										},
-										"userProperties": [],
-										"typeProperties": {
-											"source": {
-												"type": "ExcelSource",
-												"storeSettings": {
-													"type": "AzureBlobFSReadSettings",
-													"recursive": true,
-													"enablePartitionDiscovery": false
-												}
-											},
-											"sink": {
-												"type": "ParquetSink",
-												"storeSettings": {
-													"type": "AzureBlobFSWriteSettings"
-												},
-												"formatSettings": {
-													"type": "ParquetWriteSettings"
-												}
-											},
-											"enableStaging": false,
-											"translator": {
-												"type": "TabularTranslator",
-												"typeConversion": true,
-												"typeConversionSettings": {
-													"allowDataTruncation": true,
-													"treatBooleanAsNumber": false
-												}
-											}
-										},
-										"inputs": [
-											{
-												"referenceName": "votos",
-												"type": "DatasetReference",
-												"parameters": {
-													"p_contenir": {
-														"value": "@pipeline().parameters.contenedor",
-														"type": "Expression"
-													},
-													"p_folder": "EXC",
-													"p_file": {
-														"value": "@activity('Get Metadata1').output.itemName",
-														"type": "Expression"
-													}
-												}
-											}
-										],
-										"outputs": [
-											{
-												"referenceName": "DS_Votoslimpios",
-												"type": "DatasetReference",
-												"parameters": {
-													"p_container": {
-														"value": "@pipeline().parameters.contenedor",
-														"type": "Expression"
-													},
-													"p_folder": "EXC/temps",
-													"p_file": {
-														"value": "@concat(activity('Get Metadata1').output.itemName, '_', formatDateTime(utcNow(), 'yyyyMMdd_HHmmss'), '.parquet')",
-														"type": "Expression"
-													}
-												}
-											}
-										]
-									},
-									{
-										"name": "Set variable1_copy1",
-										"type": "SetVariable",
-										"dependsOn": [
-											{
-												"activity": "Copy data1_copy1",
-												"dependencyConditions": [
-													"Succeeded"
-												]
-											}
-										],
-										"policy": {
-											"secureOutput": false,
-											"secureInput": false
-										},
-										"userProperties": [],
-										"typeProperties": {
-											"variableName": "nombre_historico",
-											"value": {
-												"value": "@activity('Copy data1_copy1').output.name",
-												"type": "Expression"
-											}
-										}
-									}
-								]
-							}
-						}
-					]
-				}
+				"outputs": [
+					{
+						"referenceName": "ds_onprem_file",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"parameters": {
