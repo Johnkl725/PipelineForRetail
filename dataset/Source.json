@@ -10,23 +10,14 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "departments.csv",
-				"fileSystem": "datalake"
+				"fileName": "ELT_HA_Tesis.csv",
+				"fileSystem": "minerialezama"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": [
-			{
-				"name": "department_id",
-				"type": "String"
-			},
-			{
-				"name": "department_name",
-				"type": "String"
-			}
-		]
+		"schema": []
 	}
 }
