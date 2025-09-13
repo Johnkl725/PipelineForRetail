@@ -5,9 +5,9 @@
 		"annotations": [],
 		"type": "FileServer",
 		"typeProperties": {
-			"host": "C:\\DataPractice",
+			"host": "C:\\JohnFiles",
 			"userId": "john.castillo1@unmsm.edu.pe",
-			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDg2Qzg4OERFLUM0MzgtNDc4NC04RTg2LTIzODU1MjFDM0NCNF83OTQ4NDI0Ni0yNzIzLTQwZmYtYjNmZi1hOGFiNzI5Zjc2NTkiDQp9"
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDg2Qzg4OERFLUM0MzgtNDc4NC04RTg2LTIzODU1MjFDM0NCNF80ZDBkNTNiMC01ZmUxLTQ1NjctYWYwYS0yMmJhYTU0ODhkYjIiDQp9"
 		},
 		"connectVia": {
 			"referenceName": "AutoResolveIntegrationRuntime",
