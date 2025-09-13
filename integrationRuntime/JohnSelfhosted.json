@@ -1,0 +1,6 @@
+{
+	"name": "JohnSelfhosted",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}
