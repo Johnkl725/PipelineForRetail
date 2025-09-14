@@ -5,6 +5,8 @@
 			{
 				"name": "CopySQLData",
 				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "LastLoad",
