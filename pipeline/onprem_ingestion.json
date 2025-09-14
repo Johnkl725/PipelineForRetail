@@ -5,81 +5,72 @@
 			{
 				"name": "ForEachFile",
 				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
+				"userProperties": []
+			},
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"items": {
-						"value": "@pipeline().parameters.files",
-						"type": "Expression"
-					},
-					"activities": [
-						{
-							"name": "Copy data1",
-							"type": "Copy",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"source": {
-									"type": "DelimitedTextSource",
-									"storeSettings": {
-										"type": "AzureBlobFSReadSettings",
-										"recursive": true,
-										"enablePartitionDiscovery": false
-									},
-									"formatSettings": {
-										"type": "DelimitedTextReadSettings"
-									}
-								},
-								"sink": {
-									"type": "ParquetSink",
-									"storeSettings": {
-										"type": "AzureBlobFSWriteSettings"
-									},
-									"formatSettings": {
-										"type": "ParquetWriteSettings"
-									}
-								},
-								"enableStaging": false,
-								"translator": {
-									"type": "TabularTranslator",
-									"typeConversion": true,
-									"typeConversionSettings": {
-										"allowDataTruncation": true,
-										"treatBooleanAsNumber": false
-									}
-								}
-							},
-							"inputs": [
-								{
-									"referenceName": "DelimitedText4",
-									"type": "DatasetReference",
-									"parameters": {
-										"p_file_name": {
-											"value": "@item().file_name",
-											"type": "Expression"
-										}
-									}
-								}
-							],
-							"outputs": [
-								{
-									"referenceName": "ds_onprem_file",
-									"type": "DatasetReference",
-									"parameters": {
-										"p_filename": "@item().file_name"
-									}
-								}
-							]
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "FileServerReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
 						}
-					]
-				}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_onprem_src_param",
+						"type": "DatasetReference",
+						"parameters": {
+							"p_file_name": "blabla"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_onprem_file",
+						"type": "DatasetReference",
+						"parameters": {
+							"p_filename": "asas"
+						}
+					}
+				]
 			}
 		],
 		"parameters": {
@@ -96,15 +87,6 @@
 						"file_name": "dim_passengers.csv"
 					}
 				]
-			},
-			"p_mapping_passanger": {
-				"type": "object"
-			},
-			"p_mapping_flight": {
-				"type": "object"
-			},
-			"p_mapping_airline": {
-				"type": "object"
 			}
 		},
 		"variables": {

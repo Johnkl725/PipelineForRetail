@@ -15,10 +15,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": {
-					"value": "@dataset().p_filename",
-					"type": "Expression"
-				},
+				"fileName": "firstcopy.parquet",
 				"folderPath": "onprem",
 				"fileSystem": "bronze"
 			},
