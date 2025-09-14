@@ -109,7 +109,7 @@
 						"type": "IntegrationRuntimeReference"
 					},
 					"body": {
-						"value": "{\n    \"pipeline_name\": @{pipeline().Pipeline},\n    \"run_id\" : @{pipeline().RunId},\n    \"status\" : @{activity('ExecuteIncrementalIngestion').Status},\n    \"error\" : @{if(equals(activity('ExecuteIncrementalIngestion').Status,'Failed'),string(activity('ExecuteIncrementalIngestion').error),'No error')}\n}",
+						"value": "{\n    \"pipeline_name\": \"@{pipeline().Pipeline}\",\n    \"run_id\": \"@{pipeline().RunId}\",\n    \"status\": \"@{activity('ExecuteIncrementalIngestion').Status}\",\n    \"error\": \"@{if(equals(activity('ExecuteIncrementalIngestion').Status,'Failed'), string(activity('ExecuteIncrementalIngestion').error), 'No error')}\"\n}",
 						"type": "Expression"
 					}
 				}
