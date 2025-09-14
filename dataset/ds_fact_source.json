@@ -1,0 +1,20 @@
+{
+	"name": "ds_fact_source",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureDatalakeStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "sql",
+				"fileSystem": "bronze"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}

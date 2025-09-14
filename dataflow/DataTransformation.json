@@ -1,0 +1,147 @@
+{
+	"name": "DataTransformation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_silver_src",
+						"type": "DatasetReference"
+					},
+					"name": "DimAirline"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dim_flight_src",
+						"type": "DatasetReference"
+					},
+					"name": "DimFlight"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dim_passenger",
+						"type": "DatasetReference"
+					},
+					"name": "DimPassenger"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_fact_source",
+						"type": "DatasetReference"
+					},
+					"name": "FactBookings"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dimairport",
+						"type": "DatasetReference"
+					},
+					"name": "DimAirport"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "derivedColumnCountry"
+				},
+				{
+					"name": "selectCols"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "derivedgenderflag"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "filtergreater25"
+				},
+				{
+					"name": "derivedName"
+				},
+				{
+					"name": "castCost"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          airline_id as short,",
+				"          airline_name as string,",
+				"          country as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> DimAirline",
+				"source(output(",
+				"          flight_id as short,",
+				"          flight_number as string,",
+				"          departure_time as string,",
+				"          arrival_time as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> DimFlight",
+				"source(output(",
+				"          passenger_id as short,",
+				"          full_name as string,",
+				"          gender as string,",
+				"          age as short,",
+				"          country as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> DimPassenger",
+				"source(output(",
+				"          booking_id as integer,",
+				"          passenger_id as integer,",
+				"          flight_id as integer,",
+				"          airline_id as integer,",
+				"          origin_airport_id as integer,",
+				"          destination_airport_id as integer,",
+				"          booking_date as date,",
+				"          ticket_cost as decimal(10,2),",
+				"          flight_duration_mins as integer,",
+				"          checkin_status as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> FactBookings",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> DimAirport",
+				"DimAirline derive(country = upper(country)) ~> derivedColumnCountry",
+				"DimFlight select(mapColumn(",
+				"          flight_id,",
+				"          flight_number,",
+				"          departure_timestamp = departure_time,",
+				"          arrival_time",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectCols",
+				"DimPassenger select(mapColumn(",
+				"          passenger_id,",
+				"          full_name,",
+				"          gender_flag = gender,",
+				"          age,",
+				"          country",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 derive(gender_flag = regexReplace(gender_flag, \"M\", \"Male\")) ~> derivedgenderflag",
+				"derivedgenderflag derive(gender_flag = regexReplace(gender_flag, \"F\", \"Female\")) ~> derivedColumn1",
+				"derivedColumn1 filter(age > 25) ~> filtergreater25",
+				"filtergreater25 derive(first_name = split(full_name,\" \")[1]) ~> derivedName",
+				"FactBookings cast(output(",
+				"          ticket_cost as integer",
+				"     ),",
+				"     errors: true) ~> castCost"
+			]
+		}
+	}
+}
