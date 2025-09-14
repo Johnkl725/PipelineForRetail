@@ -90,10 +90,10 @@
 				"type": "array",
 				"defaultValue": [
 					{
-						"file_name": "DimPassanger.csv"
+						"file_name": "DimPassenger.csv"
 					},
 					{
-						"file_name": "DimAirlane.csv"
+						"file_name": "DimAirline.csv"
 					},
 					{
 						"file_name": "DimFlight.csv"
