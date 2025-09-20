@@ -1,5 +1,5 @@
 {
-	"name": "onprem_ingestion",
+	"name": "BronzeLayer",
 	"properties": {
 		"activities": [
 			{

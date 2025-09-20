@@ -24,6 +24,13 @@
 						"type": "LinkedServiceReference"
 					},
 					"name": "FactBookings"
+				},
+				{
+					"linkedService": {
+						"referenceName": "LS_AzureDatalakeStorage",
+						"type": "LinkedServiceReference"
+					},
+					"name": "source1"
 				}
 			],
 			"sinks": [
@@ -33,6 +40,13 @@
 						"type": "LinkedServiceReference"
 					},
 					"name": "sinkGold"
+				},
+				{
+					"linkedService": {
+						"referenceName": "LS_AzureDatalakeStorage",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
 				}
 			],
 			"transformations": [
@@ -53,6 +67,25 @@
 				},
 				{
 					"name": "alterRow1"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "ConteoMasVisitas"
+				},
+				{
+					"name": "RankingVuelos",
+					"description": "Esta función ventana es para rankear a los países que más visitas han tenido"
+				},
+				{
+					"name": "Top5Vuelos"
+				},
+				{
+					"name": "alterRow2"
 				}
 			],
 			"scriptLines": [
@@ -91,6 +124,12 @@
 				"     format: 'delta',",
 				"     fileSystem: 'silver',",
 				"     folderPath: 'FactBookings') ~> FactBookings",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'delta',",
+				"     fileSystem: 'silver',",
+				"     folderPath: 'DimAirport') ~> source1",
 				"FactBookings, DimAirline join(FactBookings@airline_id == DimAirline@airline_id,",
 				"     joinType:'left',",
 				"     matchType:'exact',",
@@ -118,6 +157,33 @@
 				"     Top = denseRank()) ~> Ranking",
 				"Ranking filter(Top < 6) ~> Top5",
 				"Top5 alterRow(insertIf(1==1)) ~> alterRow1",
+				"DimAirline, FactBookings join(DimAirline@airline_id == FactBookings@airline_id,",
+				"     joinType:'right',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 select(mapColumn(",
+				"          airline_name,",
+				"          country,",
+				"          booking_id,",
+				"          passenger_id,",
+				"          flight_id,",
+				"          airline_id = FactBookings@airline_id,",
+				"          origin_airport_id,",
+				"          destination_airport_id,",
+				"          booking_date,",
+				"          ticket_cost,",
+				"          flight_duration_mins,",
+				"          checkin_status",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 aggregate(groupBy(country),",
+				"     TotalVuelos = count()) ~> ConteoMasVisitas",
+				"ConteoMasVisitas window(desc(TotalVuelos, true),",
+				"     Top = denseRank()) ~> RankingVuelos",
+				"RankingVuelos filter(Top < 6) ~> Top5Vuelos",
+				"Top5Vuelos alterRow(insertIf(1==1)) ~> alterRow2",
 				"alterRow1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'delta',",
@@ -137,7 +203,26 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sinkGold"
+				"     skipDuplicateMapOutputs: true) ~> sinkGold",
+				"alterRow2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     fileSystem: 'gold',",
+				"     folderPath: 'BusinessViewFlights',",
+				"     overwrite: true,",
+				"     mergeSchema: false,",
+				"     autoCompact: false,",
+				"     optimizedWrite: false,",
+				"     vacuum: 0,",
+				"     deletable: false,",
+				"     insertable: true,",
+				"     updateable: false,",
+				"     upsertable: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}

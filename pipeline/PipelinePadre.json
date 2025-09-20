@@ -12,7 +12,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "onprem_ingestion",
+						"referenceName": "BronzeLayer",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true,
@@ -37,7 +37,7 @@
 				}
 			},
 			{
-				"name": "EjecutarPipeline",
+				"name": "SilverLayer",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -53,18 +53,18 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "API_Ingestion",
+						"referenceName": "SilverLayer",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
 				}
 			},
 			{
-				"name": "ExecuteIncrementalIngestion",
+				"name": "GoldLayer",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "EjecutarPipeline",
+						"activity": "SilverLayer",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -76,18 +76,18 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "SQLToDatalake",
+						"referenceName": "GoldLayer",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
 				}
 			},
 			{
-				"name": "FAILUREALERT",
+				"name": "EstadoPipeline",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "ExecuteIncrementalIngestion",
+						"activity": "GoldLayer",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -109,7 +109,7 @@
 						"type": "IntegrationRuntimeReference"
 					},
 					"body": {
-						"value": "{\n    \"pipeline_name\": \"@{pipeline().Pipeline}\",\n    \"run_id\": \"@{pipeline().RunId}\",\n    \"status\": \"@{activity('ExecuteIncrementalIngestion').Status}\",\n    \"error\": \"@{if(equals(activity('ExecuteIncrementalIngestion').Status,'Failed'), string(activity('ExecuteIncrementalIngestion').error), 'No error')}\"\n}",
+						"value": "{\n    \"pipeline_name\": \"@{pipeline().Pipeline}\",\n    \"run_id\": \"@{pipeline().RunId}\",\n    \"status\": \"@{activity('GoldLayer').Status}\",\n    \"error\": \"@{if(equals(activity('GoldLayer').Status,'Failed'), string(activity('GoldLayer').error), 'No error')}\"\n}",
 						"type": "Expression"
 					}
 				}
