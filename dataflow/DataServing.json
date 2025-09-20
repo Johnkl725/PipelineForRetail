@@ -39,14 +39,14 @@
 						"referenceName": "LS_AzureDatalakeStorage",
 						"type": "LinkedServiceReference"
 					},
-					"name": "sinkGold"
+					"name": "sinkViewTopAirlines"
 				},
 				{
 					"linkedService": {
 						"referenceName": "LS_AzureDatalakeStorage",
 						"type": "LinkedServiceReference"
 					},
-					"name": "sink1"
+					"name": "sinkViewTopPaises"
 				}
 			],
 			"transformations": [
@@ -203,7 +203,7 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sinkGold",
+				"     skipDuplicateMapOutputs: true) ~> sinkViewTopAirlines",
 				"alterRow2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'delta',",
@@ -222,7 +222,7 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true) ~> sinkViewTopPaises"
 			]
 		}
 	}
