@@ -1,5 +1,5 @@
 {
-	"name": "DS_TopNominados",
+	"name": "lk_OrdersCore",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabase1",
@@ -19,14 +19,8 @@
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": {
-				"value": "@dataset().schema",
-				"type": "Expression"
-			},
-			"table": {
-				"value": "@dataset().tabla",
-				"type": "Expression"
-			}
+			"schema": "sales",
+			"table": "Orders"
 		}
 	}
 }

@@ -121,7 +121,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"DS_RelativeURL": {
-													"value": "@activity('LKP_get_metadata').output.firstRow.BaseUrl",
+													"value": "@concat(activity('LKP_get_metadata').output.firstRow.BaseUrl,activity('LKP_get_metadata').output.firstRow.RelativeEndpoint)",
 													"type": "Expression"
 												}
 											}
