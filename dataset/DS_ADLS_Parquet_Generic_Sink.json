@@ -1,18 +1,18 @@
 {
-	"name": "DS_Votoslimpios",
+	"name": "DS_ADLS_Parquet_Generic_Sink",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LS_AzureDatalakeStorage",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"p_container": {
+			"DS_Container": {
 				"type": "string"
 			},
-			"p_folder": {
+			"DS_Directory": {
 				"type": "string"
 			},
-			"p_file": {
+			"DS_FileName": {
 				"type": "string"
 			}
 		},
@@ -22,15 +22,15 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@dataset().p_file",
+					"value": "@dataset().DS_FileName",
 					"type": "Expression"
 				},
 				"folderPath": {
-					"value": "@dataset().p_folder",
+					"value": "@dataset().DS_Directory",
 					"type": "Expression"
 				},
 				"fileSystem": {
-					"value": "@dataset().p_container",
+					"value": "@dataset().DS_Container",
 					"type": "Expression"
 				}
 			},

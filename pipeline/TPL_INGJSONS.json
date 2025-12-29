@@ -176,15 +176,23 @@
 											"partitionOption": "None"
 										},
 										"sink": {
-											"type": "JsonSink",
+											"type": "ParquetSink",
 											"storeSettings": {
 												"type": "AzureBlobFSWriteSettings"
 											},
 											"formatSettings": {
-												"type": "JsonWriteSettings"
+												"type": "ParquetWriteSettings"
 											}
 										},
-										"enableStaging": false
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
 									},
 									"inputs": [
 										{
@@ -204,7 +212,7 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "DS_ADLS_Generic_Sink",
+											"referenceName": "DS_ADLS_Parquet_Generic_Sink",
 											"type": "DatasetReference",
 											"parameters": {
 												"DS_Container": {
