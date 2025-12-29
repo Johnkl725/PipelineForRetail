@@ -4,7 +4,7 @@
 		"annotations": [],
 		"type": "RestService",
 		"typeProperties": {
-			"url": "https://fakestoreapi.com",
+			"url": "https://api.escuelajs.co",
 			"enableServerCertificateValidation": true,
 			"authenticationType": "Anonymous"
 		},
