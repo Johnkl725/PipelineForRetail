@@ -52,7 +52,7 @@
 						"referenceName": "AzureSqlTable1",
 						"type": "DatasetReference"
 					},
-					"firstRowOnly": false
+					"firstRowOnly": true
 				}
 			},
 			{
@@ -69,7 +69,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"on": {
-						"value": "@activity('LKP_get_metadata').output.LoadType",
+						"value": "@activity('LKP_get_metadata').output.firstRow.LoadType",
 						"type": "Expression"
 					},
 					"cases": [
