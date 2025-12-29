@@ -1,0 +1,16 @@
+{
+	"name": "LS_Rest_FakeStoreAPI",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://fakestoreapi.com",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
