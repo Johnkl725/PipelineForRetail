@@ -69,7 +69,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"on": {
-						"value": "@activity('LKP_get_metadata').output.firstRow.LoadType",
+						"value": "@activity('LKP_get_metadata').output.LoadType",
 						"type": "Expression"
 					},
 					"cases": [
