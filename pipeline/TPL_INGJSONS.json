@@ -1,0 +1,71 @@
+{
+	"name": "TPL_INGJSONS",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "get_date",
+					"value": ""
+				}
+			},
+			{
+				"name": "LKP_get_metadata",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "@concat(\n    'SELECT * FROM adm.vw_Pipeline_Runtime_Config WHERE 1=1 ',\n    if(empty(pipeline().parameters.pipeline_id), '', concat(' AND PipelineID = ', pipeline().parameters.pipeline_id)),\n    if(empty(pipeline().parameters.module), '', concat(' AND Domain = ''', pipeline().parameters.module, ''''))\n)",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": true
+				}
+			}
+		],
+		"parameters": {
+			"pipeline_id": {
+				"type": "string"
+			},
+			"module": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"get_date": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}

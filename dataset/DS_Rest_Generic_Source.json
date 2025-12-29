@@ -1,0 +1,23 @@
+{
+	"name": "DS_Rest_Generic_Source",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Rest_FakeStoreAPI",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"DS_RelativeURL": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@dataset().DS_RelativeURL",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	}
+}

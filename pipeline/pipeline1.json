@@ -15,20 +15,6 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataset": {
-						"referenceName": "DelimitedText2",
-						"type": "DatasetReference",
-						"parameters": {
-							"container": {
-								"value": "@pipeline().parameters.p_container",
-								"type": "Expression"
-							},
-							"directory": {
-								"value": "@pipeline().parameters.p_directory",
-								"type": "Expression"
-							}
-						}
-					},
 					"fieldList": [
 						"childItems",
 						"lastModified"
@@ -132,53 +118,8 @@
 													"fileExtension": ".txt"
 												}
 											},
-											"enableStaging": false,
-											"translator": {
-												"type": "TabularTranslator",
-												"typeConversion": true,
-												"typeConversionSettings": {
-													"allowDataTruncation": true,
-													"treatBooleanAsNumber": false
-												}
-											}
-										},
-										"inputs": [
-											{
-												"referenceName": "DelimitedText1",
-												"type": "DatasetReference",
-												"parameters": {
-													"container": {
-														"value": "@pipeline().parameters.p_container",
-														"type": "Expression"
-													},
-													"directory": {
-														"value": "@pipeline().parameters.p_directory",
-														"type": "Expression"
-													},
-													"file_name": {
-														"value": "@activity('Filter1').output.value",
-														"type": "Expression"
-													}
-												}
-											}
-										],
-										"outputs": [
-											{
-												"referenceName": "DelimitedText1",
-												"type": "DatasetReference",
-												"parameters": {
-													"container": {
-														"value": "@pipeline().parameters.p_container",
-														"type": "Expression"
-													},
-													"directory": "bronze",
-													"file_name": {
-														"value": "@activity('Filter1').output.value",
-														"type": "Expression"
-													}
-												}
-											}
-										]
+											"enableStaging": false
+										}
 									}
 								],
 								"ifTrueActivities": [
@@ -217,56 +158,8 @@
 													"fileExtension": ".txt"
 												}
 											},
-											"enableStaging": false,
-											"translator": {
-												"type": "TabularTranslator",
-												"typeConversion": true,
-												"typeConversionSettings": {
-													"allowDataTruncation": true,
-													"treatBooleanAsNumber": false
-												}
-											}
-										},
-										"inputs": [
-											{
-												"referenceName": "DelimitedText1",
-												"type": "DatasetReference",
-												"parameters": {
-													"container": {
-														"value": "@pipeline().parameters.p_container",
-														"type": "Expression"
-													},
-													"directory": {
-														"value": "@pipeline().parameters.p_directory",
-														"type": "Expression"
-													},
-													"file_name": {
-														"value": "@item().name",
-														"type": "Expression"
-													}
-												}
-											}
-										],
-										"outputs": [
-											{
-												"referenceName": "DelimitedText1",
-												"type": "DatasetReference",
-												"parameters": {
-													"container": {
-														"value": "@pipeline().parameters.p_container",
-														"type": "Expression"
-													},
-													"directory": {
-														"value": "bronze",
-														"type": "Expression"
-													},
-													"file_name": {
-														"value": "@item().name",
-														"type": "Expression"
-													}
-												}
-											}
-										]
+											"enableStaging": false
+										}
 									},
 									{
 										"name": "Set variable1",
@@ -342,47 +235,8 @@
 							"fileExtension": ".txt"
 						}
 					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "DelimitedText1",
-						"type": "DatasetReference",
-						"parameters": {
-							"container": {
-								"value": "@pipeline().parameters.p_container",
-								"type": "Expression"
-							},
-							"directory": {
-								"value": "bronze",
-								"type": "Expression"
-							},
-							"file_name": {
-								"value": "@name_silver",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "DelimitedText1",
-						"type": "DatasetReference",
-						"parameters": {
-							"container": "datalake",
-							"directory": "bronze",
-							"file_name": "Online Retail Data Set.csv"
-						}
-					}
-				]
+					"enableStaging": false
+				}
 			},
 			{
 				"name": "Filter2",
@@ -438,21 +292,6 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"dataset": {
-									"referenceName": "DelimitedText1",
-									"type": "DatasetReference",
-									"parameters": {
-										"container": {
-											"value": "@pipeline().parameters.p_container",
-											"type": "Expression"
-										},
-										"directory": {
-											"value": "@pipeline().parameters.p_directory",
-											"type": "Expression"
-										},
-										"file_name": "@item().name"
-									}
-								},
 								"fieldList": [
 									"lastModified"
 								],
@@ -559,21 +398,6 @@
 										},
 										"userProperties": [],
 										"typeProperties": {
-											"dataset": {
-												"referenceName": "DelimitedText1",
-												"type": "DatasetReference",
-												"parameters": {
-													"container": {
-														"value": "@pipeline().parameters.p_container",
-														"type": "Expression"
-													},
-													"directory": "bronze",
-													"file_name": {
-														"value": "@item().name",
-														"type": "Expression"
-													}
-												}
-											},
 											"logStorageSettings": {
 												"linkedServiceName": {
 													"referenceName": "AzureBlobStorage1",
@@ -629,56 +453,8 @@
 													"fileExtension": ".txt"
 												}
 											},
-											"enableStaging": false,
-											"translator": {
-												"type": "TabularTranslator",
-												"typeConversion": true,
-												"typeConversionSettings": {
-													"allowDataTruncation": true,
-													"treatBooleanAsNumber": false
-												}
-											}
-										},
-										"inputs": [
-											{
-												"referenceName": "DelimitedText1",
-												"type": "DatasetReference",
-												"parameters": {
-													"container": {
-														"value": "@pipeline().parameters.p_container",
-														"type": "Expression"
-													},
-													"directory": {
-														"value": "@pipeline().parameters.p_directory",
-														"type": "Expression"
-													},
-													"file_name": {
-														"value": "@item().name",
-														"type": "Expression"
-													}
-												}
-											}
-										],
-										"outputs": [
-											{
-												"referenceName": "DelimitedText1",
-												"type": "DatasetReference",
-												"parameters": {
-													"container": {
-														"value": "@pipeline().parameters.p_container",
-														"type": "Expression"
-													},
-													"directory": {
-														"value": "bronze",
-														"type": "Expression"
-													},
-													"file_name": {
-														"value": "@item().name",
-														"type": "Expression"
-													}
-												}
-											}
-										]
+											"enableStaging": false
+										}
 									},
 									{
 										"name": "Set variable1_copy1_copy1_copy1",
@@ -724,24 +500,6 @@
 										},
 										"userProperties": [],
 										"typeProperties": {
-											"dataset": {
-												"referenceName": "DelimitedText1",
-												"type": "DatasetReference",
-												"parameters": {
-													"container": {
-														"value": "@pipeline().parameters.p_container",
-														"type": "Expression"
-													},
-													"directory": {
-														"value": "@pipeline().parameters.p_directory",
-														"type": "Expression"
-													},
-													"file_name": {
-														"value": "@item().name",
-														"type": "Expression"
-													}
-												}
-											},
 											"logStorageSettings": {
 												"linkedServiceName": {
 													"referenceName": "AzureBlobStorage1",

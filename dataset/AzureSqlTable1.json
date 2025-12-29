@@ -1,0 +1,63 @@
+{
+	"name": "AzureSqlTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "EntityID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SystemID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Domain",
+				"type": "varchar"
+			},
+			{
+				"name": "EntityName",
+				"type": "varchar"
+			},
+			{
+				"name": "RelativeEndpoint",
+				"type": "varchar"
+			},
+			{
+				"name": "LoadType",
+				"type": "varchar"
+			},
+			{
+				"name": "WatermarkColumn",
+				"type": "varchar"
+			},
+			{
+				"name": "SinkContainer",
+				"type": "varchar"
+			},
+			{
+				"name": "SinkPath",
+				"type": "varchar"
+			},
+			{
+				"name": "IsActive",
+				"type": "bit"
+			},
+			{
+				"name": "WatermarkValue",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "adm",
+			"table": "Ingestion_Entities"
+		}
+	}
+}

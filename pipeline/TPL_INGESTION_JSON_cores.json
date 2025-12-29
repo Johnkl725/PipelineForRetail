@@ -1,0 +1,24 @@
+{
+	"name": "TPL_INGESTION_JSON_cores",
+	"properties": {
+		"activities": [
+			{
+				"name": "TPL_INGJsons",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "TPL_INGJSONS",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": []
+	}
+}
