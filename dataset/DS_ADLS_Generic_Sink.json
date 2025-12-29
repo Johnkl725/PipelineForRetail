@@ -1,0 +1,40 @@
+{
+	"name": "DS_ADLS_Generic_Sink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureDatalakeStorage",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"DS_Container": {
+				"type": "string"
+			},
+			"DS_Directory": {
+				"type": "string"
+			},
+			"DS_FileName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().DS_FileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().DS_Directory",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().DS_Container",
+					"type": "Expression"
+				}
+			}
+		},
+		"schema": {}
+	}
+}
