@@ -167,13 +167,9 @@
 									"userProperties": [],
 									"typeProperties": {
 										"source": {
-											"type": "RestSource",
-											"httpRequestTimeout": "00:01:40",
-											"requestInterval": "00.00:00:00.010",
-											"requestMethod": "GET",
-											"paginationRules": {
-												"supportRFC5988": "true"
-											}
+											"type": "AzureSqlSource",
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
 										},
 										"sink": {
 											"type": "JsonSink",
@@ -188,11 +184,15 @@
 									},
 									"inputs": [
 										{
-											"referenceName": "DS_Rest_Generic_Source",
+											"referenceName": "lk_OrdersCore",
 											"type": "DatasetReference",
 											"parameters": {
-												"DS_RelativeURL": {
-													"value": "@concat(\n    activity('LKP_get_metadata').output.firstRow.BaseUrl,\n    '?start_date=',\n    activity('LKP_get_metadata').output.firstRow.WatermarkValue\n)",
+												"schema": {
+													"value": "@activity('LKP_get_metadata').output.firstRow.SourceSchema",
+													"type": "Expression"
+												},
+												"tabla": {
+													"value": "@activity('LKP_get_metadata').output.firstRow.EntityName",
 													"type": "Expression"
 												}
 											}
@@ -243,14 +243,14 @@
 										"storedProcedureParameters": {
 											"NewWatermarkValue": {
 												"value": {
-													"value": "@activity('LKP_get_metadata').output.firstRow.PipelineID",
+													"value": "@variables('v_CurrentRuntime')",
 													"type": "Expression"
 												},
 												"type": "String"
 											},
 											"PipelineID": {
 												"value": {
-													"value": "@variables('v_CurrentRuntime')",
+													"value": "@activity('LKP_get_metadata').output.firstRow.PipelineID",
 													"type": "Expression"
 												},
 												"type": "Int32"
