@@ -15,10 +15,28 @@
 						"referenceName": "TPL_INGJSONS",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"pipeline_id": {
+							"value": "@pipeline().parameters.pipeline_id",
+							"type": "Expression"
+						},
+						"module": {
+							"value": "@pipeline().parameters.domain",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
+		"parameters": {
+			"pipeline_id": {
+				"type": "string"
+			},
+			"domain": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }
