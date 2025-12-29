@@ -169,7 +169,7 @@
 										"source": {
 											"type": "AzureSqlSource",
 											"sqlReaderQuery": {
-												"value": "SELECT * FROM @{activity('LKP_get_metadata').output.value[0].SourceSchema}.@{activity('LKP_get_metadata').output.value[0].RelativeEndpoint}\nWHERE @{activity('LKP_get_metadata').output.value[0].WatermarkColumn} > '@{activity('LKP_get_metadata').output.value[0].WatermarkValue}'",
+												"value": "SELECT * FROM @{activity('LKP_get_metadata').output.value[0].SourceSchema}.@{activity('LKP_get_metadata').output.value[0].RelativeEndpoint}\nWHERE @{activity('LKP_get_metadata').output.value[0].WatermarkColumn} > CAST('@{activity('LKP_get_metadata').output.value[0].WatermarkValue}' AS DATETIME2)",
 												"type": "Expression"
 											},
 											"queryTimeout": "02:00:00",
@@ -255,7 +255,7 @@
 										"storedProcedureParameters": {
 											"NewWatermarkValue": {
 												"value": {
-													"value": "@variables('v_CurrentRuntime')",
+													"value": "@formatDateTime(variables('v_CurrentRuntime'), 'yyyy-MM-dd HH:mm:ss')",
 													"type": "Expression"
 												},
 												"type": "String"
