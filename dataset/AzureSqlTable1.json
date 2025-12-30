@@ -9,22 +9,55 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "cliente_id",
+				"name": "EntityID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SystemID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Domain",
 				"type": "varchar"
 			},
 			{
-				"name": "fecha",
-				"type": "date"
+				"name": "EntityName",
+				"type": "varchar"
 			},
 			{
-				"name": "monto_PEN",
-				"type": "float",
-				"precision": 15
+				"name": "RelativeEndpoint",
+				"type": "varchar"
+			},
+			{
+				"name": "LoadType",
+				"type": "varchar"
+			},
+			{
+				"name": "WatermarkColumn",
+				"type": "varchar"
+			},
+			{
+				"name": "SinkContainer",
+				"type": "varchar"
+			},
+			{
+				"name": "SinkPath",
+				"type": "varchar"
+			},
+			{
+				"name": "IsActive",
+				"type": "bit"
+			},
+			{
+				"name": "WatermarkValue",
+				"type": "varchar"
 			}
 		],
 		"typeProperties": {
-			"schema": "dbo",
-			"table": "Transacciones"
+			"schema": "adm",
+			"table": "Ingestion_Entities"
 		}
 	}
 }
