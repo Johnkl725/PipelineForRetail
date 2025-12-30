@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "TPL_INGJsons",
+				"name": "TPL_INGSERVER",
 				"type": "ExecutePipeline",
 				"dependsOn": [],
 				"policy": {
