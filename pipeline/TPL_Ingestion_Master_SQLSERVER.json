@@ -3,36 +3,84 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "TPL_INGSERVER",
-				"type": "ExecutePipeline",
+				"name": "LKP_Get_Active_Entities",
+				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
 					"secureInput": false
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"pipeline": {
-						"referenceName": "TPL_INGSQLServer",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"pipeline_id": {
-							"value": "@pipeline().parameters.pipeline_id",
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "SELECT EntityID \nFROM adm.Ingestion_Entities \nWHERE IsActive = 1 AND Domain = '@{pipeline().parameters.domain}'",
 							"type": "Expression"
 						},
-						"module": {
-							"value": "@pipeline().parameters.domain",
-							"type": "Expression"
-						}
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sqlsource",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "FE_Loop_Entities",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "LKP_Get_Active_Entities",
+						"dependencyConditions": [
+							"Succeeded"
+						]
 					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('LKP_Get_Active_Entities').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "TPL_INGSERVER",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"policy": {
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "TPL_INGSQLServer",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"pipeline_id": {
+										"value": "@item().EntityID",
+										"type": "Expression"
+									},
+									"module": {
+										"value": "@pipeline().parameters.domain",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
 				}
 			}
 		],
 		"parameters": {
-			"pipeline_id": {
-				"type": "string"
-			},
 			"domain": {
 				"type": "string"
 			}
