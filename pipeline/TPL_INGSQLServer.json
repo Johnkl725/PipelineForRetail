@@ -1,0 +1,448 @@
+{
+	"name": "TPL_INGSQLServer",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_CurrentRuntime",
+					"value": {
+						"value": "@utcnow()",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "LKP_get_metadata",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "@concat(\n    'SELECT * FROM adm.vw_Pipeline_Runtime_Config WHERE 1=1 ',\n    if(empty(pipeline().parameters.pipeline_id), '', concat(' AND PipelineID = ', pipeline().parameters.pipeline_id)),\n    if(empty(pipeline().parameters.module), '', concat(' AND Domain = ''', pipeline().parameters.module, ''''))\n)",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Switch1",
+				"type": "Switch",
+				"dependsOn": [
+					{
+						"activity": "If Condition1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"on": {
+						"value": "@activity('LKP_get_metadata').output.value[0].LoadType",
+						"type": "Expression"
+					},
+					"cases": [
+						{
+							"value": "FULL",
+							"activities": [
+								{
+									"name": "Copy data1",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_OnPrem_SQL_Generic",
+											"type": "DatasetReference",
+											"parameters": {
+												"SchemaName": {
+													"value": "@activity('LKP_get_metadata').output.value[0].SourceSchema",
+													"type": "Expression"
+												},
+												"TableName": {
+													"value": "@activity('LKP_get_metadata').output.value[0].RelativeEndpoint",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_ADLS_Generic_Sink",
+											"type": "DatasetReference",
+											"parameters": {
+												"DS_Container": {
+													"value": "@activity('LKP_get_metadata').output.value[0].SinkContainer",
+													"type": "Expression"
+												},
+												"DS_Directory": {
+													"value": "@activity('LKP_get_metadata').output.value[0].SinkPath",
+													"type": "Expression"
+												},
+												"DS_FileName": {
+													"value": "@activity('LKP_get_metadata').output.value[0].SinkFileName",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						},
+						{
+							"value": "INCREMENTAL",
+							"activities": [
+								{
+									"name": "Copy data2",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "ParquetWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_OnPrem_SQL_Generic",
+											"type": "DatasetReference",
+											"parameters": {
+												"SchemaName": {
+													"value": "@activity('LKP_get_metadata').output.value[0].SourceSchema",
+													"type": "Expression"
+												},
+												"TableName": {
+													"value": "@activity('LKP_get_metadata').output.value[0].RelativeEndpoint",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_ADLS_Parquet_Generic_Sink",
+											"type": "DatasetReference",
+											"parameters": {
+												"DS_Container": {
+													"value": "@activity('LKP_get_metadata').output.value[0].SinkContainer",
+													"type": "Expression"
+												},
+												"DS_Directory": {
+													"value": "@concat(\n    activity('LKP_get_metadata').output.value[0].SinkPath,\n    '/',\n    formatDateTime(variables('v_CurrentRuntime'), 'yyyy/MM/dd')\n)",
+													"type": "Expression"
+												},
+												"DS_FileName": {
+													"value": "@activity('LKP_get_metadata').output.value[0].SinkFileName",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "Stored procedure1",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "Copy data2",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[adm].[usp_Update_Watermark]",
+										"storedProcedureParameters": {
+											"NewWatermarkValue": {
+												"value": {
+													"value": "@formatDateTime(variables('v_CurrentRuntime'), 'yyyy-MM-dd HH:mm:ss')",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"PipelineID": {
+												"value": {
+													"value": "@activity('LKP_get_metadata').output.value[0].PipelineID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "AzureSqlDatabase1",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "LKP_get_metadata",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@empty(activity('LKP_get_metadata').output.value)",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "Log_Start_Process",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[adm].[usp_Log_Execution]",
+								"storedProcedureParameters": {
+									"ADF_RunID": {
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"EntityID": {
+										"value": {
+											"value": "@activity('LKP_get_metadata').output.value[0].PipelineID",
+											"type": "Expression"
+										},
+										"type": "Int32"
+									},
+									"Message": {
+										"value": {
+											"value": "Iniciando carga dinámica...",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"PipelineName": {
+										"value": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"Status": {
+										"value": {
+											"value": "STARTED",
+											"type": "Expression"
+										},
+										"type": "String"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "AzureSqlDatabase1",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "Fail1",
+							"type": "Fail",
+							"dependsOn": [
+								{
+									"activity": "Log_Error_NotFound",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"message": {
+									"value": "Error Crítico: El Pipeline ID proporcionado no existe o la\nentidad está inactiva en la base de datos.",
+									"type": "Expression"
+								},
+								"errorCode": {
+									"value": "EntityNotFoundOrInactive",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Log_Error_NotFound",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[adm].[usp_Log_Execution]",
+								"storedProcedureParameters": {
+									"ADF_RunID": {
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"EntityID": {
+										"value": {
+											"value": "@pipeline().parameters.pipeline_id",
+											"type": "Expression"
+										},
+										"type": "Int32"
+									},
+									"Message": {
+										"value": {
+											"value": "Error Crítico: Metadata no encontrada o inactiva para este ID.",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"PipelineName": {
+										"value": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"Status": {
+										"value": {
+											"value": "FAILED",
+											"type": "Expression"
+										},
+										"type": "String"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "AzureSqlDatabase1",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"pipeline_id": {
+				"type": "string"
+			},
+			"module": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"v_CurrentRuntime": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
