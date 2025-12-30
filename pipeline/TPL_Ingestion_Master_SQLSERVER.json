@@ -1,0 +1,42 @@
+{
+	"name": "TPL_Ingestion_Master_SQLSERVER",
+	"properties": {
+		"activities": [
+			{
+				"name": "TPL_INGJsons",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "TPL_INGSQLServer",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"pipeline_id": {
+							"value": "@pipeline().parameters.pipeline_id",
+							"type": "Expression"
+						},
+						"module": {
+							"value": "@pipeline().parameters.domain",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"pipeline_id": {
+				"type": "string"
+			},
+			"domain": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
